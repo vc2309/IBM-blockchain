@@ -41,5 +41,9 @@ Once all these are defined, the .bna file can be generated using the composer co
 
 - these events can be emitted by HC and subscribed to by external apps. 
 - Events are defined in the .cto file
+- `event BasicEvent{...}`
 - Emmitted by the .js scripts of a BND
-- 
+- 3 STEP process
+	1. `var factory=getFactory();` : this allows events to be created as part the transaction
+	2. `var EventName=factory.newEvent('org.namespace','EventName');` : creates the event "object" so to speak. The properties of this event require setting.
+	3. `emit(EventName);`
