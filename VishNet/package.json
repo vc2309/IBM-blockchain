@@ -1,0 +1,28 @@
+{
+  "name": "vishnet",
+  "connection-type": "embedded",
+  "x-type":"hlfv1",
+  "version": "0.0.2",
+  "description": "Final network with crypto chaincode",
+  "scripts": {
+    "test": "mocha --recursive"
+  },
+  "author": "Vishnu Chopra",
+  "email": "vishnu.chopra2309@gmail.com",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "chai": "latest",
+    "composer-admin": "latest",
+    "composer-client": "latest",
+    "composer-common": "^0.19.5",
+    "composer-connector-embedded": "latest",
+    "eslint": "latest",
+    "istanbul": "latest",
+    "mkdirp": "latest",
+    "mocha": "latest"
+  },
+  "dependencies": {
+    "http": "0.0.0",
+    "lodash": "^4.17.10"
+  }
+}
