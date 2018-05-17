@@ -36,7 +36,7 @@ Once all these are defined, the .bna file can be generated using the composer co
 - `composer archive create` : command to make a .bna file from the bnd on disk
 	For example : `composer archive create -t dir -n .` at the network directory. -t = type
 - Once the .bna archive file is created, we need to install the network using
-	` composer network install --archiveFile tutorial-network@1.0.0.bna --card PeerAdmin@fabric-network`
+	` composer network install --archiveFile tutorial-network@1.0.0.bna --card PeerAdmin@hlfv1`
 - To complete the deploying of the network, we must start it, using 
 	`composer network start --networkName tutorial-network --networkVersion 1.0.0 --card PeerAdmin@fabric-network --networkAdmin admin --networkAdminEnrollSecret adminpw` 
 **It is important to review the usage and structure of the Modelling Language prior to moving to the next portion**
