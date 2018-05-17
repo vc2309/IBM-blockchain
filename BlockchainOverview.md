@@ -23,19 +23,32 @@ Once all these are defined, the .bna file can be generated using the composer co
 
 
 ## Creating a BND
-- The simplest way is to use the Yoeman comand line tool to create a skeleton bnd
+- The simplest way is to use the Yoeman comand line tool to create a skeleton bnd by running `yo hyperledger-composer`
 
 - lib/
 - models/
 - permissions.acl
-- package.json [  contains all the metadate for bnd]
+- package.json [  contains all the metadata for bnd]
 - README.md
 
 ## Deploying a Business Network
 
 - `composer archive create` : command to make a .bna file from the bnd on disk
-- `composer runtime install -n my-network -c PeerAdmin@fabric-network` 
+	For example : `composer archive create -t dir -n .` at the network directory. -t = type
+- Once the .bna archive file is created, we need to install the network using
+	` composer network install --archiveFile tutorial-network@1.0.0.bna --card PeerAdmin@fabric-network`
+- To complete the deploying of the network, we must start it, using 
+	`composer network start --networkName tutorial-network --networkVersion 1.0.0 --card PeerAdmin@fabric-network --networkAdmin admin --networkAdminEnrollSecret adminpw` 
 **It is important to review the usage and structure of the Modelling Language prior to moving to the next portion**
+
+- To launch the REST server, run `composer-playground`
+
+### Deploying networks to Hyperledger Fabric v1.1
+- In v1.1 there are members and administrators within each network.
+- Only administrators can install chaincode. In order to deploy a network, we must provide an identity that has admin rights.
+- *PeerAdmin* is the card which is made using the **certificate** + **private key** of the peer administrative identity.
+- 
+
 
 ## Events in a Network
 
