@@ -42,7 +42,12 @@ async function sampleTransaction(tx) {
     emit(event);
 }
 
-simplePay = async (tx) => {
+/**
+ * simplePay
+ * @param {org.vishnuchopra.cryptonet.simplePay} simplePay
+ * @transaction
+ */
+async function simplePay(tx) {
     //Save old payer, payee value
     const payerBal = tx.payer.balance;
     const payeeBal = tx.payee.balance;
@@ -51,16 +56,16 @@ simplePay = async (tx) => {
     const amt = tx.amt;
 
     //Check if amt is less than balance
-    if(amt<=payerOld)
-    {
-        const payerBal = payerBal - amt;
-        const payeeBal = payeeBal + amt;
-    }
+   
+        tx.payer.balance = payerBal - amt;
+        tx.payee.balance = payeeBal + amt;
+    
 
     //Return new payee and payer vals
     // Get the participant registry for the participant.
     const participantRegistry = await getParticipantRegistry('org.vishnuchopra.cryptonet.SampleParticipant');
     // Update the participant in the participant registry.
+  
     await participantRegistry.update(tx.payer);
     await participantRegistry.update(tx.payee);
 
