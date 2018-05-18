@@ -42,4 +42,32 @@ async function sampleTransaction(tx) {
     emit(event);
 }
 
+simplePay = async (tx) => {
+    //Save old payer, payee value
+    const payerBal = tx.payer.balance;
+    const payeeBal = tx.payee.balance;
 
+    //Save amt to be paid
+    const amt = tx.amt;
+
+    //Check if amt is less than balance
+    if(amt<=payerOld)
+    {
+        const payerBal = payerBal - amt;
+        const payeeBal = payeeBal + amt;
+    }
+
+    //Return new payee and payer vals
+    // Get the participant registry for the participant.
+    const participantRegistry = await getParticipantRegistry('org.vishnuchopra.cryptonet.SampleParticipant');
+    // Update the participant in the participant registry.
+    await participantRegistry.update(tx.payer);
+    await participantRegistry.update(tx.payee);
+
+    //Emit event for modified payee + payer
+    let event = getFactory().newEvent('org.vishnuchopra.cryptonet', 'PayEvent');
+    event.payee = tx.payee;
+    event.payer = tx.payer;
+    event.amt = amt;
+    emit(event);
+}

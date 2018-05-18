@@ -22,7 +22,7 @@ participant SampleParticipant identified by participantId {
   o String participantId
   o String firstName
   o String lastName
-  --> CryptoBalance balance
+  o String balance
 }
 
 asset CryptoBalance identified by ownerId {
@@ -41,6 +41,18 @@ asset SampleAsset identified by assetId {
 transaction SampleTransaction {
   --> SampleAsset asset
   o String newValue
+}
+
+transaction simplePay {
+  --> SampleParticipant payer
+  --> SampleParticipant payee
+  o String amt
+}
+
+event PayEvent {
+  --> SampleParticipant payer
+  --> SampleParticipant payee
+  o String amt
 }
 
 event SampleEvent {
