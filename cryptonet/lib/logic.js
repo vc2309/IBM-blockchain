@@ -56,10 +56,11 @@ async function simplePay(tx) {
     const amt = tx.amt;
 
     //Check if amt is less than balance
-   
+    if(amt<= payerBal)
+    {
         tx.payer.balance = payerBal - amt;
         tx.payee.balance = payeeBal + amt;
-    
+    }
 
     //Return new payee and payer vals
     // Get the participant registry for the participant.

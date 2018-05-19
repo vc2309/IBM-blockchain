@@ -3,7 +3,7 @@
     "composer": "^0.19.5"
   },
   "name": "cryptonet",
-  "version": "0.0.31",
+  "version": "0.0.4",
   "description": "Objective : update network model, test new trade chaincode.",
   "scripts": {
     "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/cryptonet.bna",

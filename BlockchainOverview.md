@@ -38,7 +38,17 @@ Once all these are defined, the .bna file can be generated using the composer co
 - Once the .bna archive file is created, we need to install the network using
 	` composer network install --archiveFile tutorial-network@1.0.0.bna --card PeerAdmin@hlfv1`
 - To complete the deploying of the network, we must start it, using 
-	`composer network start --networkName tutorial-network --networkVersion 1.0.0 --card PeerAdmin@fabric-network --networkAdmin admin --networkAdminEnrollSecret adminpw` 
+	` composer network start --networkName cryptonet --networkVersion 0.0.1 --networkAdmin admin --networkAdminEnrollSecret adminpw --card PeerAdmin@hlfv1 --file networkadmin.card`
+-To import the network administrator identity as a usable business network card, run the following command:
+	`composer card import --file networkadmin.card`
+
+### Updating a Business Network
+
+- Make the change to package.json version
+- run `composer archive create -t dir -n .`
+- run `composer network install -a NETWORK-FILENAME.bna -c peeradmin@hlfv1`
+- run `composer network upgrade -c peeradmin@hlfv1 -n NETWORK-NAME -V NETWORK-VERSION`
+
 **It is important to review the usage and structure of the Modelling Language prior to moving to the next portion**
 
 - To launch the REST server, run `composer-playground`
