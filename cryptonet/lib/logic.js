@@ -72,8 +72,8 @@ async function simplePay(tx) {
     const accountRegistry = await getAssetRegistry('org.vishnuchopra.cryptonet.CryptoBalance');
     // Update the participant in the participant registry.
   
-    await participantRegistry.update(tx.payer);
-    await participantRegistry.update(tx.payee);
+    await accountRegistry.update(tx.payer.AC);
+    await accountRegistry.update(tx.payee.AC);
 
     //Emit event for modified payee + payer
     // let event = getFactory().newEvent('org.vishnuchopra.cryptonet', 'PayEvent');
