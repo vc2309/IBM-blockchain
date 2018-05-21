@@ -17,7 +17,7 @@
  */
 rule EverybodyCanReadEverything {
     description: "Allow all participants read access to all resources"
-    participant: "org.vishnuchopra.cryptonet.SampleParticipant"
+    participant: "org.vishnuchopra.cryptonet.Member"
     operation: READ
     resource: "org.vishnuchopra.cryptonet.*"
     action: ALLOW
@@ -25,7 +25,7 @@ rule EverybodyCanReadEverything {
 
 rule EverybodyCanSubmitTransactions {
     description: "Allow all participants to submit transactions"
-    participant: "org.vishnuchopra.cryptonet.SampleParticipant"
+    participant: "org.vishnuchopra.cryptonet.Member"
     operation: CREATE
     resource: "org.vishnuchopra.cryptonet.SampleTransaction"
     action: ALLOW
@@ -33,7 +33,7 @@ rule EverybodyCanSubmitTransactions {
 
 rule OwnerHasFullAccessToTheirAssets {
     description: "Allow all participants full access to their assets"
-    participant(p): "org.vishnuchopra.cryptonet.SampleParticipant"
+    participant(p): "org.vishnuchopra.cryptonet.Member"
     operation: ALL
     resource(r): "org.vishnuchopra.cryptonet.SampleAsset"
     condition: (r.owner.getIdentifier() === p.getIdentifier())

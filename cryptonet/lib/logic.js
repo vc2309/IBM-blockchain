@@ -49,31 +49,63 @@ async function sampleTransaction(tx) {
  */
 async function simplePay(tx) {
     //Save old payer, payee value
-    const payerBal = tx.payer.balance;
-    const payeeBal = tx.payee.balance;
+    const payerBal = tx.payer.AC.value;
+    const payeeBal = tx.payee.AC.value;
 
     //Save amt to be paid
     const amt = tx.amt;
 
     //Check if amt is less than balance
-    if(amt<= payerBal)
+    if(amt<= payerBal && amt>0)
     {
-        tx.payer.balance = payerBal - amt;
-        tx.payee.balance = payeeBal + amt;
+        tx.payer.AC.value = payerBal - amt;
+        tx.payee.AC.value = payeeBal + amt;
+    }
+
+    else
+    {
+        //emit error event   
     }
 
     //Return new payee and payer vals
     // Get the participant registry for the participant.
-    const participantRegistry = await getParticipantRegistry('org.vishnuchopra.cryptonet.SampleParticipant');
+    const accountRegistry = await getAssetRegistry('org.vishnuchopra.cryptonet.CryptoBalance');
     // Update the participant in the participant registry.
   
     await participantRegistry.update(tx.payer);
     await participantRegistry.update(tx.payee);
 
     //Emit event for modified payee + payer
-    let event = getFactory().newEvent('org.vishnuchopra.cryptonet', 'PayEvent');
-    event.payee = tx.payee;
-    event.payer = tx.payer;
-    event.amt = amt;
-    emit(event);
+    // let event = getFactory().newEvent('org.vishnuchopra.cryptonet', 'PayEvent');
+    // event.payee = tx.payee;
+    // event.payer = tx.payer;
+    // event.amt = amt;
+    // emit(event);
 }
+
+/**
+ * addValue
+ * @param {org.vishnuchopra.cryptonet.addValue} addValue
+ * @transaction
+ */
+
+ async function addValue(tx) {
+
+    //Save the amt to be added
+    var amt = tx.amt;
+
+    //Save adding member
+    var AC = tx.adder.AC;
+
+    //Validate addition
+    if(amt>0)
+    {
+        AC.value += amt; 
+    }
+
+    //Send the updated balance back
+
+    const accountRegistry = await getAssetRegistry('org.vishnuchopra.cryptonet.CryptoBalance');
+    await accountRegistry.update(AC);
+ }
+

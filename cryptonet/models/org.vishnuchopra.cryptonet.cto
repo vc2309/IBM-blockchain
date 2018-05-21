@@ -18,23 +18,22 @@
 
 namespace org.vishnuchopra.cryptonet
 
-participant SampleParticipant identified by participantId {
+participant Member identified by participantId {
   o String participantId
   o String firstName
   o String lastName
-  o Double balance
+  o String passcode
+  --> CryptoBalance AC
 }
 
-asset CryptoBalance identified by ownerId {
-  --> SampleParticipant owner
-  o String ownerId
-  o String value
-
+asset CryptoBalance identified by ACno {
+  o String ACno
+  o Double value
 }
 
 asset SampleAsset identified by assetId {
   o String assetId
-  --> SampleParticipant owner
+  --> Member owner
   o String value
 }
 
@@ -44,14 +43,19 @@ transaction SampleTransaction {
 }
 
 transaction simplePay {
-  --> SampleParticipant payer
-  --> SampleParticipant payee
+  --> Member payer
+  --> Member payee
+  o Double amt
+}
+
+transaction addValue {
+  --> Member adder
   o Double amt
 }
 
 event PayEvent {
-  --> SampleParticipant payer
-  --> SampleParticipant payee
+  --> Member payer
+  --> Member payee
   o Double amt
 }
 
