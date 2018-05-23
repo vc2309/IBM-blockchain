@@ -109,3 +109,21 @@ async function simplePay(tx) {
     await accountRegistry.update(AC);
  }
 
+/**
+ * utxoPay
+ * @param {org.vishnuchopra.cryptonet.utxoPay} utxoPay
+ * @transaction
+ */
+
+ async function utxoPay(tx) {
+
+    //Get payer priv key
+
+    //Get tx pub key for payee
+
+    //Get tx hashcode
+
+    //Get actual payee priv key and tx pub key for payer
+
+    //Get actual
+ }
