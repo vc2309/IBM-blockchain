@@ -113,17 +113,19 @@ async function simplePay(tx) {
         var newCoin = factory.newResource('org.vishnuchopra.cryptonet', 'CoinBlock', coinHash.toString());
         newCoin.value=amt;
       //Add the new coinBlock to the registry
-        coinRegistry.add(newCoin);
-          //.then( () => {
+      try{  
+      coinRegistry.add(newCoin)
+          
           //Add the coin to inputs array
     AC.inputs.push(newCoin);
-        //})
-        //  .catch( (e) => {
-          //throw e;
-        //});
+        
+    }
+        catch (e) {
+          throw e;
+        }
         
         
-        //AC.inputs.push(amt);
+        
     }
 
     //Send the updated balance back
@@ -132,26 +134,54 @@ async function simplePay(tx) {
  }
 
 
+
+
 /**
  * utxoPay
  * @param {org.vishnuchopra.cryptonet.utxoPay} utxoPay
  * @transaction
  */
 
-async function utxoPay (tx) {
-
+async function utxoPay(tx) {
+    
     //Get input array
+    var payerAC = tx.payer.AC;
+    var payeeAC = tx.payee.AC;
+    var inputs = tx.payer.AC.inputs;
+    const amt = tx.amt;
 
     //Validate both users are valid and not the same person
+    if (tx.payer.pid == tx.payee.pid)
+    {
+        throw "Can't send to the same account"; 
+    }
+    
 
     //Sum input array
+    var totalunspent = 0;
+    for( i in inputs)
+    {
+      totalunspent+=i.value;
+    }
 
     //Validate amt -not neg -not more than value total
+    if(amt<0 || amt>totalunspent)
+    {
+      throw "Value is not valid";
+    }
+    
+    
 
     //Set payer input to []
-
+    payerAC.inputs = [];
+    payerAC.unspentBalance = 0;
+    
+    //Make a new coinBlock
+    var newCoin = getFactory().newResource('org.vishnuchopra.cryptonet','CoinBlock',);
+    //Pay amt to payee
+    payeeAC.inputs
+  
 }
-
 
 // /**
 //  * safePay
