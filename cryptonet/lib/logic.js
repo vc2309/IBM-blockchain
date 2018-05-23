@@ -49,8 +49,8 @@ async function sampleTransaction(tx) {
  */
 async function simplePay(tx) {
     //Save old payer, payee value
-    const payerBal = tx.payer.AC.value;
-    const payeeBal = tx.payee.AC.value;
+    const payerBal = tx.payer.AC.unspentBalance;
+    const payeeBal = tx.payee.AC.unspentBalance;
 
     //Save amt to be paid
     const amt = tx.amt;
@@ -58,8 +58,8 @@ async function simplePay(tx) {
     //Check if amt is less than balance
     if(amt<= payerBal && amt>0)
     {
-        tx.payer.AC.value = payerBal - amt;
-        tx.payee.AC.value = payeeBal + amt;
+        tx.payer.AC.unspentBalance = payerBal - amt;
+        tx.payee.AC.unspentBalance = payeeBal + amt;
     }
 
     else
@@ -83,6 +83,7 @@ async function simplePay(tx) {
     // emit(event);
 }
 
+
 /**
  * addValue
  * @param {org.vishnuchopra.cryptonet.addValue} addValue
@@ -96,18 +97,40 @@ async function simplePay(tx) {
 
     //Save adding member
     var AC = tx.adder.AC;
-
+   
+   //First get the registry
+   const accountRegistry = await getAssetRegistry('org.vishnuchopra.cryptonet.CryptoBalance');
+   const coinRegistry = await getAssetRegistry('org.vishnuchopra.cryptonet.CoinBlock');
+    const factory = getFactory();
     //Validate addition
     if(amt>0)
-    {
-        AC.value += amt; 
+    {   
+        //Add to unspentbal
+        AC.unspentBalance += amt;
+        //Append amt to inputs
+        const allCoins = await coinRegistry.getAll();
+        var coinHash = allCoins.length + 1;
+        var newCoin = factory.newResource('org.vishnuchopra.cryptonet', 'CoinBlock', coinHash.toString());
+        newCoin.value=amt;
+      //Add the new coinBlock to the registry
+        coinRegistry.add(newCoin);
+          //.then( () => {
+          //Add the coin to inputs array
+    AC.inputs.push(newCoin);
+        //})
+        //  .catch( (e) => {
+          //throw e;
+        //});
+        
+        
+        //AC.inputs.push(amt);
     }
 
     //Send the updated balance back
 
-    const accountRegistry = await getAssetRegistry('org.vishnuchopra.cryptonet.CryptoBalance');
     await accountRegistry.update(AC);
  }
+
 
 /**
  * utxoPay
@@ -115,15 +138,53 @@ async function simplePay(tx) {
  * @transaction
  */
 
- async function utxoPay(tx) {
+async function utxoPay (tx) {
 
-    //Get payer priv key
+    //Get input array
 
-    //Get tx pub key for payee
+    //Validate both users are valid and not the same person
 
-    //Get tx hashcode
+    //Sum input array
 
-    //Get actual payee priv key and tx pub key for payer
+    //Validate amt -not neg -not more than value total
 
-    //Get actual
- }
+    //Set payer input to []
+
+}
+
+
+// /**
+//  * safePay
+//  * @param {org.vishnuchopra.cryptonet.safePay} safePay
+//  * @transaction
+//  */
+
+//  async function safePay(tx) {
+
+//     //Get payer priv key
+//     const privKey_PYR = tx.payer.privateKey;
+
+//     //Get tx pub key for payee
+//     const tx_pubKey_PYE = tx.pubKey_PYE;
+
+//     //Get tx hashcode
+//     const tx_hashcode = tx.hashcode;
+
+//     //Get actual payee priv key and pub key for payer
+//     const privKey_PYE = tx.payee.privateKey;
+//     const tx_pubKey_PYR = tx.pubKey_PYR;
+
+//     //Get actual hashcode
+//     var hashcode_actual = ;
+
+//     //Check equality
+
+
+//     //Sum all the payers inputs
+
+//     //Check if amt is less than Unspent balance
+
+//     //If yes, add amt to payee unspent balance, and sub
+
+
+//  }
