@@ -23,18 +23,11 @@ participant Member identified by participantId {
   o String firstName
   o String lastName
   o String passcode
-  o String [] pubKeys
   --> CryptoBalance AC
 }
 
 asset CryptoBalance identified by ACno {
   o String ACno
-  o Double unspentBalance
-  o CoinBlock [] inputs
-}
-
-asset CoinBlock identified by coinHash{
-  o String coinHash
   o Double value
 }
 
@@ -53,6 +46,13 @@ transaction simplePay {
   --> Member payer
   --> Member payee
   o Double amt
+}
+
+transaction utxoPay {
+  --> Member payer
+  --> Member payee
+  o Double amt
+  
 }
 
 transaction addValue {

@@ -159,15 +159,28 @@ async function utxoPay(tx) {
 
     //Sum input array
     var totalunspent = 0;
+    const coinRegistry = getAssetRegistry('org.vishnuchopra.cryptonet.CoinBlock');
     for( i in inputs)
     {
+
       totalunspent+=i.value;
+      coinRegistry.remove(i);
     }
 
+    const factory=getFactory();
     //Validate amt -not neg -not more than value total
-    if(amt<0 || amt>totalunspent)
+    if(amt<0)
     {
-      throw "Value is not valid";
+        throw "Can't send a negative amount";
+    }
+    if(amt>totalunspent)
+    {
+        const allCoins = await coinRegistry.getAll();
+        var coinHash = allCoins.length + 1;
+        var newCoin=factory.newResource('org.vishnuchopra.cryptonet','CoinBlock',coinHash.toString());
+        newCoin.value = amt;
+        coinRegistry.add()
+        throw "Value is not valid";
     }
     
     
@@ -175,11 +188,32 @@ async function utxoPay(tx) {
     //Set payer input to []
     payerAC.inputs = [];
     payerAC.unspentBalance = 0;
+
+    //Get current no. of blocks
+    const allCoins = await coinRegistry.getAll();
+    var coinHash = allCoins.length + 1;
     
-    //Make a new coinBlock
-    var newCoin = getFactory().newResource('org.vishnuchopra.cryptonet','CoinBlock',);
+    //Make a new coinBlock to send PYE
+    var PYECoin = getFactory().newResource('org.vishnuchopra.cryptonet','CoinBlock',coinHash.toString());
+    PYECoin.value = amt;
     //Pay amt to payee
-    payeeAC.inputs
+    payeeAC.inputs.push(PYECoin);
+    coinRegistry.add(PYECoin);
+
+    //Make change coin to send back to PYR
+    if(amt<totalunspent)
+    {
+        var PYRCoin = getFactory().newResource('org.vishnuchopra.cryptonet','CoinBlock',(coinHash+1).toString());
+        PYRCoin.value = totalunspent-amt;
+        payerAC.inputs.push(PYRCoin);
+        coinRegistry.add(PYRCoin);
+    }
+
+    const memberRegistry = getAssetRegistry('org.vishnuchopra.cryptonet.CryptoBalance');
+    memberRegistry.update(payeeAC);
+    memberRegistry.update(payerAC);
+    
+    
   
 }
 
