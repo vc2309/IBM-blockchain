@@ -151,7 +151,7 @@ async function utxoPay(tx) {
     const amt = tx.amt;
 
     //Validate both users are valid and not the same person
-    if (tx.payer.pid == tx.payee.pid)
+    if (tx.payer.participantId == tx.payee.participantId)
     {
         throw "Can't send to the same account"; 
     }
@@ -159,12 +159,13 @@ async function utxoPay(tx) {
 
     //Sum input array
     var totalunspent = 0;
-    const coinRegistry = getAssetRegistry('org.vishnuchopra.cryptonet.CoinBlock');
+    const coinRegistry = await getAssetRegistry('org.vishnuchopra.cryptonet.CoinBlock');
     for( i in inputs)
     {
 
-      totalunspent+=i.value;
-      coinRegistry.remove(i);
+      totalunspent+=inputs[i].value;
+      inputs[i].active=false;
+      coinRegistry.update(inputs[i]);
     }
 
     const factory=getFactory();
@@ -179,14 +180,14 @@ async function utxoPay(tx) {
         var coinHash = allCoins.length + 1;
         var newCoin=factory.newResource('org.vishnuchopra.cryptonet','CoinBlock',coinHash.toString());
         newCoin.value = amt;
-        coinRegistry.add()
+        coinRegistry.add(newCoin);
         throw "Value is not valid";
     }
     
     
 
     //Set payer input to []
-    payerAC.inputs = [];
+    // payerAC.inputs = [];
     payerAC.unspentBalance = 0;
 
     //Get current no. of blocks
@@ -198,6 +199,7 @@ async function utxoPay(tx) {
     PYECoin.value = amt;
     //Pay amt to payee
     payeeAC.inputs.push(PYECoin);
+    payeeAC.unspentBalance += PYECoin.value;
     coinRegistry.add(PYECoin);
 
     //Make change coin to send back to PYR
@@ -206,15 +208,14 @@ async function utxoPay(tx) {
         var PYRCoin = getFactory().newResource('org.vishnuchopra.cryptonet','CoinBlock',(coinHash+1).toString());
         PYRCoin.value = totalunspent-amt;
         payerAC.inputs.push(PYRCoin);
+        payerAC.unspentBalance = PYRCoin.value;
         coinRegistry.add(PYRCoin);
     }
 
-    const memberRegistry = getAssetRegistry('org.vishnuchopra.cryptonet.CryptoBalance');
-    memberRegistry.update(payeeAC);
-    memberRegistry.update(payerAC);
-    
-    
-  
+    const balanceRegistry = await getAssetRegistry('org.vishnuchopra.cryptonet.CryptoBalance');
+    balanceRegistry.update(payeeAC);
+    balanceRegistry.update(payerAC);
+     
 }
 
 // /**
