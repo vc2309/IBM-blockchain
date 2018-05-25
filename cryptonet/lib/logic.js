@@ -218,38 +218,65 @@ async function utxoPay(tx) {
      
 }
 
+function modexp(x,y,N)
+{
+    if (y==0){
+        return 1;
+    }
+    var z = modexp(x,Math.round(y/2),N);
+    if(y%2==0)
+    {
+        return Math.pow(z,2)%N;
+    }
+    else{
+        return (z*(Math.pow(z,2)))%N;
+    }
+}
+
 // /**
 //  * safePay
 //  * @param {org.vishnuchopra.cryptonet.safePay} safePay
 //  * @transaction
 //  */
 
-//  async function safePay(tx) {
+/** tx = {
+        PYE_pubKeys : [...],
+        y,
+        payer,
+        payee,
+        amt
+ } */
 
-//     //Get payer priv key
-//     const privKey_PYR = tx.payer.privateKey;
+// Payer puts payee pubkeys in tx. We get x, y from {tx.pubkeys,tx.payer.privatekey} + actual private keys. Then get ka, kb.
+// Check equality of ka and kb.
 
-//     //Get tx pub key for payee
-//     const tx_pubKey_PYE = tx.pubKey_PYE;
+ async function safePay(tx) {
 
-//     //Get tx hashcode
-//     const tx_hashcode = tx.hashcode;
+    //Get P and G
+    const pub_P = tx.pubkeys[0];
+    const pub_G = tx.pubkeys[1];
 
-//     //Get actual payee priv key and pub key for payer
-//     const privKey_PYE = tx.payee.privateKey;
-//     const tx_pubKey_PYR = tx.pubKey_PYR;
+    //Calculate x
+    const PYR_pk = tx.payer.pk;
+    const PYE_pk = tx.payee.pk;
+    const x = modexp(pub_G,PYR_pk,pub_P);
 
-//     //Get actual hashcode
-//     var hashcode_actual = ;
+    //Calculate kb and ka
+    const ka = (tx.y,PYR_pk,pub_P);
+    const kb = (tx.x,PYE_pk,pub_P);
 
-//     //Check equality
+    if(ka!=kb)
+    {
+        throw "Invalid keys. Transaction failed";
+    }
+
+    var utxoTX = {
+        payer : tx.payer,
+        payee : tx.payee,
+        amt : tx.amt
+    }
+
+    await utxoPay(utxoTX);
 
 
-//     //Sum all the payers inputs
-
-//     //Check if amt is less than Unspent balance
-
-//     //If yes, add amt to payee unspent balance, and sub
-
-
-//  }
+ }

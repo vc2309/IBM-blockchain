@@ -23,7 +23,7 @@ participant Member identified by participantId {
   o String firstName
   o String lastName
   o String passcode
-  o String [] pubKeys
+  o Integer pk
   --> CryptoBalance AC
 }
 
@@ -66,6 +66,14 @@ transaction utxoPay {
   --> Member payee
   o Double amt
   
+}
+
+transaction safePay {
+  --> Member payer
+  --> Member payee
+  o Double amt
+  o Integer y
+  o Integer [] pubkeys
 }
 
 event PayEvent {
