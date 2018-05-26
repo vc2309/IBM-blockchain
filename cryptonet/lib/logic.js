@@ -162,12 +162,14 @@ async function utxoPay(tx) {
     const coinRegistry = await getAssetRegistry('org.vishnuchopra.cryptonet.CoinBlock');
     for( i in inputs)
     {
-
-      totalunspent+=inputs[i].value;
-      inputs[i].active=false;
-      coinRegistry.update(inputs[i]);
+        if(inputs[i].active)
+        {   
+          totalunspent+=inputs[i].value;
+            inputs[i].active=false;
+            coinRegistry.update(inputs[i]);
+    
+        }
     }
-
     const factory=getFactory();
     //Validate amt -not neg -not more than value total
     if(amt<0)
@@ -233,22 +235,11 @@ function modexp(x,y,N)
     }
 }
 
-// /**
-//  * safePay
-//  * @param {org.vishnuchopra.cryptonet.safePay} safePay
-//  * @transaction
-//  */
-
-/** tx = {
-        PYE_pubKeys : [...],
-        y,
-        payer,
-        payee,
-        amt
- } */
-
-// Payer puts payee pubkeys in tx. We get x, y from {tx.pubkeys,tx.payer.privatekey} + actual private keys. Then get ka, kb.
-// Check equality of ka and kb.
+/**
+ * safePay
+ * @param {org.vishnuchopra.cryptonet.safePay} safePay
+ * @transaction
+ */
 
  async function safePay(tx) {
 
@@ -258,13 +249,15 @@ function modexp(x,y,N)
 
     //Calculate x
     const PYR_pk = tx.payer.pk;
+   
     const PYE_pk = tx.payee.pk;
     const x = modexp(pub_G,PYR_pk,pub_P);
-
+    //const x = Math.pow(pub_G,PYR_pk)%pub_P;
     //Calculate kb and ka
-    const ka = (tx.y,PYR_pk,pub_P);
-    const kb = (tx.x,PYE_pk,pub_P);
-
+    const ka = modexp(tx.y,PYR_pk,pub_P);
+    //const ka = Math.pow(tx.y,PYR_pk)%pub_P;
+    const kb = modexp(x,PYE_pk,pub_P);
+    //const kb = Math.pow(x,PYE_pk)%pub_P;
     if(ka!=kb)
     {
         throw "Invalid keys. Transaction failed";
