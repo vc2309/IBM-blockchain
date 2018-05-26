@@ -62,6 +62,7 @@ app.post('/createUser', (req,res) => {
 			"lastName": req.body.lname,
 			"AC":"org.vishnuchopra.cryptonet.CryptoBalance#"+req.body.pid,
 			"passcode" : "zzzeiudsoi"
+			"pk" : req.body.pk
 		})
 	.then(
 		(response) => {
@@ -88,7 +89,7 @@ app.post('/createUser', (req,res) => {
 
 });
 
-app.post('/sendPayment', (req,res) => {
+app.post('/simplePay', (req,res) => {
 
 	axios.post('http://localhost:3000/api/org.vishnuchopra.cryptonet.simplePay', 
 		{
@@ -125,5 +126,27 @@ app.post('/addValue', (req,res) => {
 		console.log(e);
 	});
 });
+
+app.post('/utxoPay', (req,res) => {
+	axios.post('http://localhost:3000/api/org.vishnuchopra.cryptonet.utxoPay', 
+		{
+			"$class": "org.vishnuchopra.cryptonet.simplePay",
+			"payer": "org.vishnuchopra.cryptonet.Member#"+req.body.payer,
+			"payee": "org.vishnuchopra.cryptonet.Member#"+req.body.payee,
+			"amt":req.body.amt
+		})
+	.then(
+		(response) => {
+			
+			var data = JSON.stringify(response.data);
+			console.log(data);
+			res.send(data);
+		}
+	)
+	.catch ( (er) => {
+		console.log(er);
+	}
+	);
+})
 
 app.listen(8000);

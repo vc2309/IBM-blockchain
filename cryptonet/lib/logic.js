@@ -220,16 +220,16 @@ async function utxoPay(tx) {
 
 function modexp(x,y,N)
 {
-    if (y==0){
+    if (y===0){
         return 1;
     }
-    var z = modexp(x,Math.round(y/2),N);
-    if(y%2==0)
+    var z = modexp(x,Math.floor(y/2),N);
+    if(y%2===0)
     {
         return Math.pow(z,2)%N;
     }
     else{
-        return (z*(Math.pow(z,2)))%N;
+        return (x*(Math.pow(z,2)))%N;
     }
 }
 

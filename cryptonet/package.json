@@ -3,8 +3,8 @@
     "composer": "^0.19.5"
   },
   "name": "cryptonet",
-  "version": "0.2.2",
-  "description": "Chaincode updated. Mining to be added. Model definition updated",
+  "version": "0.2.4",
+  "description": "Mining + safepay",
   "scripts": {
     "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/cryptonet.bna",
     "pretest": "npm run lint",
