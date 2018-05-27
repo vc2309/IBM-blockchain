@@ -271,5 +271,36 @@ function modexp(x,y,N)
 
     await utxoPay(utxoTX);
 
-
  }
+
+
+
+
+/**
+ * mineCheck
+ * @param {org.vishnuchopra.cryptonet.mineCheck} mineCheck
+ * @transaction
+ */
+
+async function mineCheck(tx)
+{
+    const sha256 = require("sha-256-js");
+    getMemberRegistry()
+    .get(tx.miner.participantId)
+    .then( () => {
+        const padding = sha256((Math.random()*10000000000000000000000000000).toString());
+        const solution = sha256(padding+tx.hexDig);
+        if(solution.startsWith('000'))
+        {
+            const AVtx = {
+                "adder":tx.miner,
+                "amt":1
+            }
+            addValue(AVtx);
+        }
+    } )
+    .catch( (er) => {
+        throw "Invalid member";
+    });
+
+}

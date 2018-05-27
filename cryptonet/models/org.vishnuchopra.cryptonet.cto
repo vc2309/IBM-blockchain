@@ -76,6 +76,11 @@ transaction safePay {
   o Integer [] pubkeys
 }
 
+transaction mineCheck {
+  --> Member miner
+  o String hexDig
+}
+
 event PayEvent {
   --> Member payer
   --> Member payee

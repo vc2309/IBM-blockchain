@@ -11,6 +11,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
+    "crypto-js": "^3.1.9-1",
     "express": "^4.16.3",
     "express-fileupload": "^0.4.0",
     "hbs": "^4.0.1",
@@ -20,6 +21,7 @@
     "random-number": "0.0.9",
     "request": "^2.86.0",
     "requests": "^0.2.2",
+    "sha-256-js": "^1.0.3",
     "yargs": "^11.0.0"
   }
 }

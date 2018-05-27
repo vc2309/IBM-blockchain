@@ -3,8 +3,8 @@
     "composer": "^0.19.5"
   },
   "name": "cryptonet",
-  "version": "0.2.4",
-  "description": "Mining + safepay",
+  "version": "0.2.5",
+  "description": "All features added",
   "scripts": {
     "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/cryptonet.bna",
     "pretest": "npm run lint",
@@ -32,5 +32,9 @@
     "mkdirp": "latest",
     "mocha": "latest",
     "nyc": "latest"
+  },
+  "dependencies": {
+    "crypto-js": "^3.1.9-1",
+    "sha-256-js": "^1.0.3"
   }
 }
