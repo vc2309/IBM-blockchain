@@ -130,7 +130,7 @@ app.post('/addValue', (req,res) => {
 app.post('/utxoPay', (req,res) => {
 	axios.post('http://localhost:3000/api/org.vishnuchopra.cryptonet.utxoPay', 
 		{
-			"$class": "org.vishnuchopra.cryptonet.simplePay",
+			"$class": "org.vishnuchopra.cryptonet.utxoPay",
 			"payer": "org.vishnuchopra.cryptonet.Member#"+req.body.payer,
 			"payee": "org.vishnuchopra.cryptonet.Member#"+req.body.payee,
 			"amt":req.body.amt
@@ -147,6 +147,27 @@ app.post('/utxoPay', (req,res) => {
 		console.log(er);
 	}
 	);
-})
+});
+
+app.post('/safePay', (req,res) => {
+
+	axios.post('http://localhost:3000/api/org.vishnuchopra.cryptonet.safePay', {
+			"$class": "org.vishnuchopra.cryptonet.safePay",
+			"payer": "org.vishnuchopra.cryptonet.Member#"+req.body.payer,
+			"payee": "org.vishnuchopra.cryptonet.Member#"+req.body.payee,
+			"amt":req.body.amt,
+			"y":req.body.specialK,
+			"pubkeys":[req.body.P,req.body.G]
+	})
+	.then(
+		(response) => {
+			console.log(response);
+		}
+	)
+	.catch(
+		(er) => {
+			console.log(er);
+		});
+});
 
 app.listen(8000);
