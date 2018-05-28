@@ -284,23 +284,21 @@ function modexp(x,y,N)
 
 async function mineCheck(tx)
 {
-    const sha256 = require("sha-256-js");
     getMemberRegistry()
     .get(tx.miner.participantId)
-    .then( () => {
-        const padding = sha256((Math.random()*10000000000000000000000000000).toString());
-        const solution = sha256(padding+tx.hexDig);
-        if(solution.startsWith('000'))
-        {
-            const AVtx = {
-                "adder":tx.miner,
-                "amt":1
-            }
-            addValue(AVtx);
-        }
-    } )
     .catch( (er) => {
         throw "Invalid member";
     });
+
+    if(tx.hexDig.startsWith("000"))
+    {
+        addValue({
+            "adder":tx.miner,
+            "amt":1
+        });
+    }
+    else{
+        throw "Invalid number";
+    }
 
 }
