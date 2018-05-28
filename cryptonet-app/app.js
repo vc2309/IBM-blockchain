@@ -220,7 +220,12 @@ app.post('/mineCheck', (req,res) => {
     }
             
 	axios.post('http://localhost:3000/api/org.vishnuchopra.cryptonet.mineCheck', MCtx)
-	.then( (response) => {})
+	.then( (response) => {
+		console.log(response.status,response.statusText);
+	})
+	.catch((er) => {
+		console.log(er);
+	})
 })
 
 app.listen(8000);
