@@ -213,10 +213,10 @@ app.post('/safePay', (req,res) => {
 app.post('/mineCheck', (req,res) => {
 	const sha256 = require("sha-256-js");
 	const padding = sha256((Math.random()*10000000000000000000000000000).toString());
-    const solution = sha256(padding+req.hexDig);   
+    const solution = sha256(padding+req.body.hexDig);   
   	const MCtx = {
-        "miner":req.miner,
-        "hexDig":req.hexDig
+        "miner":"org.vishnuchopra.cryptonet.Member#"+req.body.miner,
+        "hexDig":req.body.hexDig
     }
             
 	axios.post('http://localhost:3000/api/org.vishnuchopra.cryptonet.mineCheck', MCtx)

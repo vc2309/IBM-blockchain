@@ -58,7 +58,14 @@ Once all these are defined, the .bna file can be generated using the composer co
 - Only administrators can install chaincode. In order to deploy a network, we must provide an identity that has admin rights.
 - *PeerAdmin* is the card which is made using the **certificate** + **private key** of the peer administrative identity.
 - 
-
+{
+  "$class": "org.vishnuchopra.cryptonet.safePay",
+  "payer": "resource:org.vishnuchopra.cryptonet.Member#2309",
+  "payee": "resource:org.vishnuchopra.cryptonet.Member#bdv",
+  "amt": 10,
+  "y": 16,
+  "pubkeys": [23,9]
+}
 
 ## Events in a Network
 
