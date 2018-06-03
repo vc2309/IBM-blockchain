@@ -226,6 +226,22 @@ app.post('/mineCheck', (req,res) => {
 	.catch((er) => {
 		console.log(er);
 	})
-})
+});
+
+// ---------------------------------------------------------------------------
+// getTransactions : req body => {}
+
+app.get("/getTransactions", (req,res) => {
+
+	axios.get('http://localhost:3000/api/system/historian')
+	.then( (response) => {
+		var data = JSON.stringify(response.data);
+			console.log(data);
+			res.send(response.data);
+	})
+	.catch ((e) => {
+		res.send(e.statusText);
+	});
+});
 
 app.listen(8000);
